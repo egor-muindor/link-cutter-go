@@ -1,0 +1,29 @@
+version: "3"
+services:
+  go-docker-image:
+    build: ./
+    restart: always
+    ports:
+      - '1337:8000'
+    environment:
+      MONGODB_URI: "${MONGO_URI}"
+    volumes:
+      - ./:/app
+    depends_on:
+      - mongo
+    networks:
+      - net
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+    ports:
+      - '27017'
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
